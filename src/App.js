@@ -1,90 +1,80 @@
 import Card from "./components/Card";
 import Header from "./components/Header.js";
 import Drawer from "./components/Drawer.js";
-
-const arr = [
-  {
-    title: "Мужские кроссовки Nike Blazer Mid Suede",
-    price: 12999,
-    imageUrl: "./img/sneakers/1.jpg",
-  },
-  {
-    title: "Мужские кроссовки Nike AirMax 270",
-    price: 13999,
-    imageUrl: "./img/sneakers/2.jpg",
-  },
-  {
-    title: "Мужские кроссовки Blazer Mid Suede",
-    price: 8990,
-    imageUrl: "./img/sneakers/3.jpg",
-  },
-  {
-    title: "Мужские кроссовки Puma x Aka Boku Future Rider",
-    price: 17000,
-    imageUrl: "./img/sneakers/4.jpg",
-  },
-  {
-    title: "Мужские кроссовки Nike AirMax 270",
-    price: 9000,
-    imageUrl: "./img/sneakers/5.jpg",
-  },
-  {
-    title: "Мужские кроссовки Nike Blazer Mid Suede",
-    price: 15000,
-    imageUrl: "./img/sneakers/6.jpg",
-  },
-  {
-    title: "Мужские кроссовки Nike AirMax 270",
-    price: 14000,
-    imageUrl: "./img/sneakers/7.jpg",
-  },
-  {
-    title: "Мужские кроссовки Puma x Aka Boku Future Rider",
-    price: 13000,
-    imageUrl: "./img/sneakers/8.jpg",
-  },
-  {
-    title: "Мужские кроссовки Nike Blazer Mid Suede",
-    price: 9000,
-    imageUrl: "./img/sneakers/9.jpg",
-  },
-  {
-    title: "Мужские кроссовки Nike AirMax 270",
-    price: 10000,
-    imageUrl: "./img/sneakers/10.jpg",
-  },
-  {
-    title: "Мужские кроссовки Nike Blazer Mid Suede",
-    price: 15000,
-    imageUrl: "./img/sneakers/5.jpg",
-  },
-  {
-    title: "Мужские кроссовки Puma x Aka Boku Future Rider",
-    price: 12000,
-    imageUrl: "./img/sneakers/3.jpg",
-  },
-];
+import React from 'react'
+import axios from "axios";
 
 function App() {
+  const [items, setItems] = React.useState([])
+  const [cartItems, setCartItems] = React.useState([])
+  const [favorites, setFavorites] = React.useState([])
+  const [searchValue, setSearchValue] = React.useState('')
+  const [cartOpened, setCartOpened] = React.useState(false)
+
+  React.useEffect(() =>{
+    axios.get('https://64356257537112453fd4d118.mockapi.io/items').then(res => {
+      setItems(res.data)
+    })
+    axios.get('https://64356257537112453fd4d118.mockapi.io/cart').then(res => {
+      setCartItems(res.data)
+    })
+  }, [])
+
+  const onAddToCart = (obj) => {
+    axios.post('https://64356257537112453fd4d118.mockapi.io/cart', obj)
+    setCartItems(prev => [...prev, obj])
+  }
+
+  const onAddToFavorite = (obj) => {
+    axios.post('https://64356257537112453fd4d118.mockapi.io/cart', obj)
+    setCartItems(prev => [...prev, obj])
+  }
+
+  const onRemoveItem = (id) =>{
+    axios.delete(`https://64356257537112453fd4d118.mockapi.io/cart/${id}`)
+    setCartItems(prev => prev.filter(item => item.id !== id))
+    
+  }
+
+  const onChangeSearchInput = (event) =>{
+    setSearchValue(event.target.value)
+  }
+
+
   return (
     <div className="wrapper clear">
-      <Drawer />
-      <Header />
+      {cartOpened && (
+        <Drawer items={cartItems} onClose={() => setCartOpened(false)} onRemove = {onRemoveItem}/>
+      )}
+      <Header
+        onClickCard={() => {
+          setCartOpened(true);
+        }}
+      />
       <div className="content p-40">
         <div className="d-flex align-center mb-40 justify-between">
-          <h1>Все кроссовки</h1>
+          <h1>
+            {searchValue ? `Поиск по запросу: ${searchValue}` : "Все кроссовки"}
+          </h1>
           <div className="serch-block d-flex">
             <img src="img/search.svg" alt="Search" />
-            <input placeholder="Поиск..." type="text" />
+            {searchValue && <img width={32} height={32} className="remove-btn cu-p clear" src="img/btn-remove.svg" alt="clear" onClick = {() => setSearchValue('')}/>}
+            <input
+              onChange={onChangeSearchInput}
+              value={searchValue}
+              placeholder="Поиск..."
+              type="text"
+            />
           </div>
         </div>
         <div className="content-items d-flex">
-
-          {arr.map((obj) => (
+          {items.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase())).map((item, index) => (
             <Card
-              title= {obj.title}
-              price={obj.price}
-              imageUrl={obj.imageUrl}
+              key={index}
+              title={item.title}
+              price={item.price}
+              imageUrl={item.imageUrl}
+              onPlus={(obj) => onAddToCart(obj)}
             />
           ))}
         </div>

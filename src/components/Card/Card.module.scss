@@ -7,6 +7,10 @@
   transition: box-shadow .2s ease-in-out, transform 0.2s ease-in-out;
   margin-bottom: 30px;
 
+  .plus{
+    cursor: pointer;
+  }
+
   h5{
     font-weight: 400;
     font-size: 14px;
