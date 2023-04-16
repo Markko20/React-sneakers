@@ -2,7 +2,13 @@ import React from 'react'
 import AppContext from '../context';
 
 const Info = ({title, description, image}) => {
-  const {setCartOpened} = React.useContext(AppContext)
+  const {setCartOpened, setIsOrderComplete} = React.useContext(AppContext)
+  const onClickBtn = () => {
+    console.log('afd')
+    setCartOpened(false)
+    setIsOrderComplete(false)
+    document.location.reload();
+  }
   return (
     <div className="cart-wrapper">
       <div className="cartEmpty d-flex align-center justyfy-center flex-column flex">
@@ -14,9 +20,9 @@ const Info = ({title, description, image}) => {
         />
         <h2>{title}</h2>
         <p className="opacity-6">{description}</p>
-        <button className="green-btn" onClick={() => setCartOpened(false)}>
+        <button className="green-btn" onClick={onClickBtn}>
           <img src="/img/arrow.svg" alt="arrow" />
-          Вернуться назад
+          Продолжить покупки
         </button>
       </div>
     </div>

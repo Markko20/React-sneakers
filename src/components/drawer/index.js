@@ -5,6 +5,7 @@ import Info from '../Info'
 import { useCart } from '../../hooks/useCart'
 
 import styles from './drawer.module.scss'
+import AppContext from '../../context'
 
 const delay = (ms) => new Promise((resolve) => {
   setTimeout(resolve, ms)
@@ -13,8 +14,8 @@ const delay = (ms) => new Promise((resolve) => {
 function Drawer({onClose, items = [], onRemove, opened}) {
   const {cartItems, setCartItems, totalPrice} = useCart()
   const [orderId,setOrderId] = React.useState(null)
-  const [isOrderComplete,setIsOrderComplete] = React.useState(false)
   const [isLoading,setIsLoading] = React.useState(false)
+  const {isOrderComplete, setIsOrderComplete} = React.useContext(AppContext)
 
   const onClickOrder = async() => {
     try{

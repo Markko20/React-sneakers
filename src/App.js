@@ -15,6 +15,8 @@ function App() {
   const [searchValue, setSearchValue] = React.useState('')
   const [cartOpened, setCartOpened] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(true)
+  const [isOrderComplete,setIsOrderComplete] = React.useState(false)
+
 
   React.useEffect(() =>{
     async function fetchData(){
@@ -100,7 +102,9 @@ function App() {
         setCartOpened,
         setCartItems,
         onAddToCart,
-        isItemFavorited
+        isItemFavorited,
+        isOrderComplete,
+        setIsOrderComplete
       }}
     >
       <div className="wrapper clear">
