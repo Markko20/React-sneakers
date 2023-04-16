@@ -4,8 +4,6 @@ import App from './App';
 import './index.scss'
 import 'macro-css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Notfound from "./pages/Notfound.jsx";
-import FavoritesPage from "./pages/FavoritesPage.jsx";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -14,8 +12,6 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="*" element={<App />} />
-        {/* <Route path="*" element={<Notfound />} /> */}
-        {/* <Route path="favorites" element={<FavoritesPage />} /> */}
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
